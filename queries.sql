@@ -18,21 +18,26 @@ from PortfolioProject..CovidDeaths
 where continent is not null
 order by 1,2
 
-
+--Percent Population Infected By each Location
 select Location, date, total_cases,population,(total_cases/population)*100 as PopulationInfected
 from PortfolioProject..CovidDeaths
 order by 1,2
 
+
+--Total infections by each Location
 select Location,Population, max(total_cases) as HighestInfectionCount,MAX((total_cases/population))*100 as PopulationInfected
 from PortfolioProject..CovidDeaths
 group by location,population
 order by PopulationInfected desc
 
+
+--Total Death Count bye each Location
 select Location, max(cast(total_deaths as int)) as TotalDeathCount
 from PortfolioProject..CovidDeaths
 where continent is not null
 group by location
 order by TotalDeathCount desc
+
 
 --By continent
 select continent, max(cast(total_deaths as int)) as TotalDeathCount
@@ -41,20 +46,28 @@ where continent is not null
 group by continent
 order by TotalDeathCount desc
 
+
+
 select date,sum(new_cases) as TotalCases,sum(cast(new_deaths as int)) as TotalDeaths, sum(cast(new_deaths as int))/sum(nullif(new_cases,0))*100 as DeathPercentage
 from PortfolioProject..CovidDeaths
 group by date
 order by 1,2
+
+
 
 select sum(new_cases) as TotalCases,sum(cast(new_deaths as int)) as TotalDeaths, sum(cast(new_deaths as int))/sum(nullif(new_cases,0))*100 as DeathPercentage
 from PortfolioProject..CovidDeaths
 --group by date
 order by 1,2
 
+
+
 select *
 From PortfolioProject..CovidDeaths dea
 join PortfolioProject..CovidVaccinations vac
 on dea.location=vac.location and dea.date=vac.date
+
+
 
 --total population vs Vaccinations
 select dea.continent,dea.location,dea.date,dea.population,vac.new_vaccinations
@@ -80,6 +93,8 @@ where dea.continent is not null
 --order by 1,2,3
 )
 select *,(RollingPeopleVaccinated/Population)*100 from PopvsVac
+
+
 
 --Temp table
 drop table if exists #PercentPopulationVaccinated
